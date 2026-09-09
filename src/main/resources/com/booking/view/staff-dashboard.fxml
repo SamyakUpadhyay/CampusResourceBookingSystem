@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.booking.controller.StaffDashboardController"
+            stylesheets="@styles.css"
+            styleClass="dashboard-root">
+
+    <top>
+        <HBox styleClass="dashboard-header" alignment="CENTER_LEFT" spacing="12">
+            <VBox spacing="4">
+                <Label text="Staff Dashboard" styleClass="dashboard-title"/>
+                <Label text="Review, approve, and manage campus bookings" styleClass="dashboard-subtitle"/>
+            </VBox>
+            <HBox HBox.hgrow="ALWAYS"/>
+            <Label fx:id="roleBadge" styleClass="role-badge-staff"/>
+            <Button fx:id="logoutButton"
+                    text="Log Out"
+                    onAction="#handleLogout"
+                    styleClass="secondary-button"/>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox styleClass="dashboard-content" spacing="18">
+            <VBox spacing="10" styleClass="welcome-card">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label fx:id="welcomeLabel" styleClass="welcome-heading"/>
+                    <HBox HBox.hgrow="ALWAYS"/>
+                    <Button text="Browse Resources" onAction="#handleBrowseResources" styleClass="primary-button"/>
+                </HBox>
+                <Label text="Approve pending student requests and manage your own bookings."
+                       styleClass="welcome-text"
+                       wrapText="true"/>
+            </VBox>
+
+            <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE">
+                <Tab text="Pending Approvals">
+                    <VBox spacing="10" styleClass="welcome-card">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Label text="Bookings awaiting approval" styleClass="welcome-heading"/>
+                            <HBox HBox.hgrow="ALWAYS"/>
+                            <Button text="Refresh" onAction="#handleRefreshApprovals" styleClass="secondary-button"/>
+                            <Button text="Approve" onAction="#handleApprove" styleClass="primary-button"/>
+                            <Button text="Reject" onAction="#handleReject" styleClass="secondary-button"/>
+                        </HBox>
+                        <TableView fx:id="approvalsTable" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="approvalBookingIdColumn" text="Booking ID" prefWidth="150"/>
+                                <TableColumn fx:id="approvalUserColumn" text="Requested By" prefWidth="150"/>
+                                <TableColumn fx:id="approvalResourceColumn" text="Resource" prefWidth="180"/>
+                                <TableColumn fx:id="approvalStartColumn" text="Start" prefWidth="150"/>
+                                <TableColumn fx:id="approvalEndColumn" text="End" prefWidth="150"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </Tab>
+
+                <Tab text="My Bookings">
+                    <VBox spacing="10" styleClass="welcome-card">
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Label text="My Bookings" styleClass="welcome-heading"/>
+                            <HBox HBox.hgrow="ALWAYS"/>
+                            <Button text="Refresh" onAction="#handleRefreshBookings" styleClass="secondary-button"/>
+                            <Button text="Cancel Selected" onAction="#handleCancelBooking" styleClass="secondary-button"/>
+                        </HBox>
+                        <TableView fx:id="bookingsTable" VBox.vgrow="ALWAYS">
+                            <columns>
+                                <TableColumn fx:id="bookingIdColumn" text="Booking ID" prefWidth="150"/>
+                                <TableColumn fx:id="resourceColumn" text="Resource" prefWidth="180"/>
+                                <TableColumn fx:id="startColumn" text="Start" prefWidth="150"/>
+                                <TableColumn fx:id="endColumn" text="End" prefWidth="150"/>
+                                <TableColumn fx:id="statusColumn" text="Status" prefWidth="120"/>
+                            </columns>
+                        </TableView>
+                    </VBox>
+                </Tab>
+            </TabPane>
+        </VBox>
+    </center>
+</BorderPane>

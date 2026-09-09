@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.booking.controller.AdminDashboardController"
+            stylesheets="@styles.css"
+            styleClass="dashboard-root">
+
+    <top>
+        <HBox styleClass="dashboard-header" alignment="CENTER_LEFT" spacing="12">
+            <VBox spacing="4">
+                <Label text="University Resource Booking System Dashboard" styleClass="dashboard-title"/>
+                <Label fx:id="welcomeLabel" styleClass="dashboard-subtitle"/>
+            </VBox>
+            <HBox HBox.hgrow="ALWAYS"/>
+            <Label fx:id="roleBadge" styleClass="role-badge-admin"/>
+            <Button text="Browse Resources" onAction="#handleBrowseResources" styleClass="secondary-button"/>
+            <Button fx:id="logoutButton"
+                    text="Log Out"
+                    onAction="#handleLogout"
+                    styleClass="secondary-button"/>
+        </HBox>
+    </top>
+
+    <left>
+        <VBox styleClass="admin-sidebar" spacing="2">
+            <Label text="CRSBS Admin" styleClass="admin-sidebar-title"/>
+            <Button fx:id="navOverview" text="Overview" onAction="#showOverview" styleClass="sidebar-nav-button-active" maxWidth="Infinity"/>
+            <Button fx:id="navApprovals" text="Pending Approvals" onAction="#showApprovals" styleClass="sidebar-nav-button" maxWidth="Infinity"/>
+            <Button fx:id="navResources" text="Manage Resources" onAction="#showResources" styleClass="sidebar-nav-button" maxWidth="Infinity"/>
+            <Button fx:id="navUsers" text="Manage Users" onAction="#showUsers" styleClass="sidebar-nav-button" maxWidth="Infinity"/>
+            <Button fx:id="navAuditLogs" text="Audit Logs" onAction="#showAuditLogs" styleClass="sidebar-nav-button" maxWidth="Infinity"/>
+            <Button fx:id="navMyBookings" text="My Bookings" onAction="#showMyBookings" styleClass="sidebar-nav-button" maxWidth="Infinity"/>
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane styleClass="dashboard-content">
+
+            <!-- ============ Overview ============ -->
+            <VBox fx:id="overviewPane" spacing="20">
+                <FlowPane hgap="18" vgap="18">
+                    <VBox styleClass="stat-card" spacing="6" prefWidth="200">
+                        <Label text="Total Bookings" styleClass="stat-card-label"/>
+                        <Label fx:id="totalBookingsValue" styleClass="stat-card-value"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" spacing="6" prefWidth="200">
+                        <Label text="Pending Approvals" styleClass="stat-card-label"/>
+                        <Label fx:id="pendingApprovalsValue" styleClass="stat-card-value"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" spacing="6" prefWidth="200">
+                        <Label text="Total Users" styleClass="stat-card-label"/>
+                        <Label fx:id="totalUsersValue" styleClass="stat-card-value"/>
+                    </VBox>
+                    <VBox styleClass="stat-card" spacing="6" prefWidth="200">
+                        <Label text="Active Resources" styleClass="stat-card-label"/>
+                        <Label fx:id="activeResourcesValue" styleClass="stat-card-value"/>
+                    </VBox>
+                </FlowPane>
+
+                <VBox styleClass="welcome-card" VBox.vgrow="ALWAYS">
+                    <Label text="Bookings by Day of Week" styleClass="welcome-heading"/>
+                    <BarChart fx:id="bookingsChart" legendVisible="false" animated="false" VBox.vgrow="ALWAYS">
+                        <xAxis>
+                            <CategoryAxis side="BOTTOM"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis side="LEFT"/>
+                        </yAxis>
+                    </BarChart>
+                </VBox>
+            </VBox>
+
+            <!-- ============ Pending Approvals ============ -->
+            <VBox fx:id="approvalsPane" spacing="10" styleClass="welcome-card" visible="false" managed="false">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="Bookings awaiting approval" styleClass="welcome-heading"/>
+                    <HBox HBox.hgrow="ALWAYS"/>
+                    <Button text="Refresh" onAction="#handleRefreshApprovals" styleClass="secondary-button"/>
+                    <Button text="Approve" onAction="#handleApprove" styleClass="primary-button"/>
+                    <Button text="Reject" onAction="#handleReject" styleClass="secondary-button"/>
+                </HBox>
+                <TableView fx:id="approvalsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="approvalBookingIdColumn" text="Booking ID" prefWidth="150"/>
+                        <TableColumn fx:id="approvalUserColumn" text="Requested By" prefWidth="150"/>
+                        <TableColumn fx:id="approvalResourceColumn" text="Resource" prefWidth="180"/>
+                        <TableColumn fx:id="approvalStartColumn" text="Start" prefWidth="150"/>
+                        <TableColumn fx:id="approvalEndColumn" text="End" prefWidth="150"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- ============ Manage Resources ============ -->
+            <VBox fx:id="resourcesPane" spacing="10" styleClass="welcome-card" visible="false" managed="false">
+                <Label text="Resource Catalogue" styleClass="welcome-heading"/>
+
+                <TableView fx:id="resourcesTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="resIdColumn" text="ID" prefWidth="100"/>
+                        <TableColumn fx:id="resNameColumn" text="Name" prefWidth="180"/>
+                        <TableColumn fx:id="resTypeColumn" text="Type" prefWidth="130"/>
+                        <TableColumn fx:id="resLocationColumn" text="Location" prefWidth="160"/>
+                        <TableColumn fx:id="resCapacityColumn" text="Capacity" prefWidth="90"/>
+                        <TableColumn fx:id="resStatusColumn" text="Status" prefWidth="130"/>
+                    </columns>
+                </TableView>
+
+                <FlowPane hgap="10" vgap="10">
+                    <TextField fx:id="newResourceIdField" promptText="Resource ID" styleClass="text-input"/>
+                    <TextField fx:id="newResourceNameField" promptText="Name" styleClass="text-input"/>
+                    <TextField fx:id="newResourceLocationField" promptText="Location" styleClass="text-input"/>
+                    <TextField fx:id="newResourceCapacityField" promptText="Capacity" styleClass="text-input"/>
+                    <ComboBox fx:id="newResourceTypeCombo" promptText="Type" prefWidth="150"/>
+                    <ComboBox fx:id="newResourceStatusCombo" promptText="Availability" prefWidth="150"/>
+                    <Button fx:id="saveResourceButton" text="Add Resource" onAction="#handleSaveResource" styleClass="primary-button"/>
+                    <Button text="Edit Selected" onAction="#handleEditResource" styleClass="secondary-button"/>
+                    <Button fx:id="cancelEditResourceButton" text="Cancel Edit" onAction="#handleCancelEditResource"
+                            styleClass="secondary-button" visible="false" managed="false"/>
+                    <Button text="Delete Selected" onAction="#handleDeleteResource" styleClass="secondary-button"/>
+                    <Button text="Toggle Maintenance" onAction="#handleToggleMaintenance" styleClass="secondary-button"/>
+                </FlowPane>
+            </VBox>
+
+            <!-- ============ Manage Users ============ -->
+            <VBox fx:id="usersPane" spacing="10" styleClass="welcome-card" visible="false" managed="false">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="Registered Users" styleClass="welcome-heading"/>
+                    <HBox HBox.hgrow="ALWAYS"/>
+                    <Button text="Refresh" onAction="#handleRefreshUsers" styleClass="secondary-button"/>
+                </HBox>
+                <TableView fx:id="usersTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="userIdColumn" text="User ID" prefWidth="130"/>
+                        <TableColumn fx:id="usernameColumn" text="Username" prefWidth="150"/>
+                        <TableColumn fx:id="userFullNameColumn" text="Full Name" prefWidth="180"/>
+                        <TableColumn fx:id="userRoleColumn" text="Role" prefWidth="110"/>
+                        <TableColumn fx:id="userEmailColumn" text="Email" prefWidth="200"/>
+                        <TableColumn fx:id="userActiveColumn" text="Status" prefWidth="90"/>
+                    </columns>
+                </TableView>
+                <FlowPane hgap="10" vgap="10">
+                    <Button fx:id="toggleActiveButton" text="Enable / Disable Selected"
+                            onAction="#handleToggleUserActive" styleClass="secondary-button"/>
+                    <ComboBox fx:id="roleReassignCombo" promptText="Reassign to role" prefWidth="150"/>
+                    <Button fx:id="reassignRoleButton" text="Reassign Role"
+                            onAction="#handleReassignRole" styleClass="secondary-button"/>
+                </FlowPane>
+            </VBox>
+
+            <!-- ============ Audit Log ============ -->
+            <VBox fx:id="auditPane" spacing="10" styleClass="welcome-card" visible="false" managed="false">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="System Audit Log" styleClass="welcome-heading"/>
+                    <HBox HBox.hgrow="ALWAYS"/>
+                    <Button text="Refresh" onAction="#handleRefreshAuditLog" styleClass="secondary-button"/>
+                </HBox>
+                <TextArea fx:id="auditLogArea" editable="false" wrapText="false" VBox.vgrow="ALWAYS"/>
+            </VBox>
+
+            <!-- ============ My Bookings ============ -->
+            <VBox fx:id="myBookingsPane" spacing="10" styleClass="welcome-card" visible="false" managed="false">
+                <HBox alignment="CENTER_LEFT" spacing="12">
+                    <Label text="My Bookings" styleClass="welcome-heading"/>
+                    <HBox HBox.hgrow="ALWAYS"/>
+                    <Button text="Refresh" onAction="#handleRefreshBookings" styleClass="secondary-button"/>
+                    <Button text="Cancel Selected" onAction="#handleCancelBooking" styleClass="secondary-button"/>
+                </HBox>
+                <TableView fx:id="bookingsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="bookingIdColumn" text="Booking ID" prefWidth="150"/>
+                        <TableColumn fx:id="resourceColumn" text="Resource" prefWidth="180"/>
+                        <TableColumn fx:id="startColumn" text="Start" prefWidth="150"/>
+                        <TableColumn fx:id="endColumn" text="End" prefWidth="150"/>
+                        <TableColumn fx:id="statusColumn" text="Status" prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+        </StackPane>
+    </center>
+</BorderPane>
