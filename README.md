@@ -1,7 +1,6 @@
 # Campus Resource & Study Space Booking System (CRSBS)
 
-JavaFX desktop application for Part B of the ITS66704 Advanced Programming
-group assignment (Group 3), built on top of the Part A analysis and design.
+JavaFX desktop application
 
 ## Requirements
 - JDK 17 or newer
